@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* Pengaturan warna dasar untuk Modern Tech & Clean */
+body {
+  background-color: #ffffff; /* Putih bersih */
+  color: #111827; /* Abu-abu sangat gelap (mendekati hitam) untuk teks */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
