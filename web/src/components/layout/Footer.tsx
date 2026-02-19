@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"; // Tambahkan import Image
+import Image from "next/image";
 import { Mail, Phone, Globe } from "lucide-react";
 
 export default function Footer() {
@@ -30,18 +30,47 @@ export default function Footer() {
               infrastructure and sustainable energy through technological
               innovation.
             </p>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-blue-500" />
-                <span>+62 852 2011 0336 / +62 812 1955 4659</span>
+            <div className="space-y-4 text-sm">
+              <div className="flex items-start gap-3">
+                <Phone className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                <div className="flex flex-col space-y-1">
+                  <a
+                    href="https://wa.me/6285220110336"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    +62 852 2011 0336
+                  </a>
+                  <a
+                    href="https://wa.me/6281219554659"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    +62 812 1955 4659
+                  </a>
+                </div>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-blue-500" />
-                <span>cs@cmesolver.com</span>
+                <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <a
+                  href="mailto:cs@cmesolver.com"
+                  className="hover:text-white transition-colors"
+                >
+                  cs@cmesolver.com
+                </a>
               </div>
               <div className="flex items-center gap-3">
-                <Globe className="w-4 h-4 text-blue-500" />
-                <span>www.cmesolver.com</span>
+                <Globe className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <a
+                  href="https://www.cmesolver.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  www.cmesolver.com
+                </a>
               </div>
             </div>
           </div>
