@@ -70,10 +70,24 @@ export default function ContactPage() {
                           Call Us
                         </p>
                         <p className="font-semibold tracking-wide">
-                          +62 852 2011 0336
+                          <a
+                            href="https://wa.me/6285220110336"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-200 transition-colors"
+                          >
+                            +62 852 2011 0336
+                          </a>
                         </p>
                         <p className="font-semibold tracking-wide">
-                          +62 812 1955 4659
+                          <a
+                            href="https://wa.me/6281219554659"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-200 transition-colors"
+                          >
+                            +62 812 1955 4659
+                          </a>
                         </p>
                       </div>
                     </div>
