@@ -1,14 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, Globe, Send } from "lucide-react";
+import { Mail, Phone, Globe, Send, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
+  // --- STATE UNTUK FORM ---
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // --- HANDLE PERUBAHAN INPUT ---
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  // --- HANDLE SUBMIT FORM ---
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Simulasi loading 1 detik agar terasa natural
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+
+      // Membuka aplikasi email bawaan klien (opsi paling aman tanpa backend)
+      const mailtoLink = `mailto:cs@cmesolver.com?subject=Website Inquiry: ${formData.subject}&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+      window.location.href = mailtoLink;
+
+      // Reset form setelah 3 detik
+      setTimeout(() => {
+        setIsSuccess(false);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      }, 3000);
+    }, 1000);
+  };
+
   return (
     <main className="min-h-screen bg-gray-50 pt-20">
       {/* --- HERO SECTION --- */}
       <section className="relative py-20 bg-[#0F172A] text-white overflow-hidden">
-        {/* Abstract Background Blueprint */}
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:32px_32px]"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -35,7 +75,6 @@ export default function ContactPage() {
       {/* --- CONTACT INFO & FORM SECTION --- */}
       <section className="py-24 relative -mt-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Main Card Container */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -43,9 +82,8 @@ export default function ContactPage() {
             className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
           >
             <div className="grid grid-cols-1 lg:grid-cols-5">
-              {/* Left Column: Contact Information */}
+              {/* --- LEFT COLUMN: CONTACT INFO --- */}
               <div className="lg:col-span-2 bg-blue-600 p-10 lg:p-12 text-white relative overflow-hidden">
-                {/* Dekorasi Cahaya Blur di background kiri */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-800/50 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
 
@@ -60,31 +98,31 @@ export default function ContactPage() {
                   </p>
 
                   <div className="space-y-8">
-                    {/* Phone */}
+                    {/* Phone - Direct to WhatsApp */}
                     <div className="flex items-start gap-4 group">
                       <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
                         <Phone className="w-5 h-5 text-blue-100" />
                       </div>
                       <div>
                         <p className="text-sm text-blue-200 font-medium mb-1">
-                          Call Us
+                          Call Us / WhatsApp
                         </p>
                         <p className="font-semibold tracking-wide">
                           <a
                             href="https://wa.me/6285220110336"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-blue-200 transition-colors"
+                            className="hover:text-white transition-colors"
                           >
                             +62 852 2011 0336
                           </a>
                         </p>
-                        <p className="font-semibold tracking-wide">
+                        <p className="font-semibold tracking-wide mt-1">
                           <a
                             href="https://wa.me/6281219554659"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-blue-200 transition-colors"
+                            className="hover:text-white transition-colors"
                           >
                             +62 812 1955 4659
                           </a>
@@ -102,7 +140,12 @@ export default function ContactPage() {
                           Email Us
                         </p>
                         <p className="font-semibold tracking-wide">
-                          cs@cmesolver.com
+                          <a
+                            href="mailto:cs@cmesolver.com"
+                            className="hover:text-white transition-colors"
+                          >
+                            cs@cmesolver.com
+                          </a>
                         </p>
                       </div>
                     </div>
@@ -117,7 +160,14 @@ export default function ContactPage() {
                           Website
                         </p>
                         <p className="font-semibold tracking-wide">
-                          www.cmesolver.com
+                          <a
+                            href="https://www.cmesolver.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white transition-colors"
+                          >
+                            www.cmesolver.com
+                          </a>
                         </p>
                       </div>
                     </div>
@@ -125,14 +175,14 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Right Column: Contact Form */}
+              {/* --- RIGHT COLUMN: CONTACT FORM --- */}
               <div className="lg:col-span-3 p-10 lg:p-12">
                 <h3 className="text-2xl font-bold text-[#0F172A] mb-8">
                   Send us a message
                 </h3>
 
-                <form className="space-y-6">
-                  {/* Row 1: Name & Email */}
+                {/* Tambahkan event handler onSubmit */}
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label
@@ -144,8 +194,11 @@ export default function ContactPage() {
                       <input
                         type="text"
                         id="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
-                        placeholder="e.g. John Doe"
+                        placeholder="e.g. Ruzia Mulyana"
                       />
                     </div>
                     <div className="space-y-2">
@@ -158,13 +211,15 @@ export default function ContactPage() {
                       <input
                         type="email"
                         id="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
                         placeholder="john@company.com"
                       />
                     </div>
                   </div>
 
-                  {/* Row 2: Subject */}
                   <div className="space-y-2">
                     <label
                       htmlFor="subject"
@@ -175,12 +230,14 @@ export default function ContactPage() {
                     <input
                       type="text"
                       id="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
                       placeholder="How can we help you?"
                     />
                   </div>
 
-                  {/* Row 3: Message */}
                   <div className="space-y-2">
                     <label
                       htmlFor="message"
@@ -190,19 +247,37 @@ export default function ContactPage() {
                     </label>
                     <textarea
                       id="message"
+                      required
                       rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white resize-none"
                       placeholder="Tell us about your project or inquiry..."
                     ></textarea>
                   </div>
 
-                  {/* Submit Button */}
+                  {/* Submit Button Dinamis */}
                   <button
-                    type="button"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0F172A] text-white rounded-xl font-semibold hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20 group"
+                    type="submit"
+                    disabled={isSubmitting || isSuccess}
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all shadow-lg group ${
+                      isSuccess
+                        ? "bg-green-600 hover:bg-green-700 text-white shadow-green-900/20"
+                        : "bg-[#0F172A] hover:bg-blue-800 text-white shadow-blue-900/20"
+                    } ${isSubmitting ? "opacity-75 cursor-not-allowed" : ""}`}
                   >
-                    Send Message
-                    <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    {isSubmitting ? (
+                      "Sending..."
+                    ) : isSuccess ? (
+                      <>
+                        Sent Successfully <CheckCircle2 className="w-5 h-5" />
+                      </>
+                    ) : (
+                      <>
+                        Send Message{" "}
+                        <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
