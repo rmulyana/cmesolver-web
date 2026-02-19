@@ -209,7 +209,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
-                        placeholder="e.g. Ruzia Mulyana"
+                        placeholder="e.g. John Due"
                       />
                     </div>
                     <div className="space-y-2">
