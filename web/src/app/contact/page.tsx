@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Mail, Phone, Globe, Send, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
-  // --- STATE UNTUK FORM ---
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +14,6 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // --- HANDLE PERUBAHAN INPUT ---
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -23,26 +21,49 @@ export default function ContactPage() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  // --- HANDLE SUBMIT FORM ---
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulasi loading 1 detik agar terasa natural
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
+    try {
+      // Memanggil API Web3Forms
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          // GANTI DENGAN ACCESS KEY DARI EMAIL TUAN MUDA
+          access_key: "f043a507-4ef5-41c5-be86-04bb6e7d214e",
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          from_name: "CME Solver Website", // Nama pengirim yang akan muncul di inbox Tuan Muda
+        }),
+      });
 
-      // Membuka aplikasi email bawaan klien (opsi paling aman tanpa backend)
-      const mailtoLink = `mailto:cs@cmesolver.com?subject=Website Inquiry: ${formData.subject}&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-      window.location.href = mailtoLink;
+      const result = await response.json();
 
-      // Reset form setelah 3 detik
-      setTimeout(() => {
-        setIsSuccess(false);
+      if (result.success) {
+        setIsSuccess(true);
+        // Kosongkan form setelah sukses
         setFormData({ name: "", email: "", subject: "", message: "" });
-      }, 3000);
-    }, 1000);
+
+        // Kembalikan tombol ke keadaan semula setelah 5 detik
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 5000);
+      } else {
+        alert("Mohon maaf, terjadi kesalahan sistem. Silakan coba lagi.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gagal mengirim pesan, pastikan koneksi internet Anda stabil.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -50,7 +71,6 @@ export default function ContactPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative py-20 bg-[#0F172A] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -86,7 +106,6 @@ export default function ContactPage() {
               <div className="lg:col-span-2 bg-blue-600 p-10 lg:p-12 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-800/50 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
-
                 <div className="relative z-10">
                   <h3 className="text-3xl font-bold mb-4">
                     Contact Information
@@ -96,9 +115,7 @@ export default function ContactPage() {
                     consultancy; we forge lasting partnerships built on
                     integrity and technical excellence.
                   </p>
-
                   <div className="space-y-8">
-                    {/* Phone - Direct to WhatsApp */}
                     <div className="flex items-start gap-4 group">
                       <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
                         <Phone className="w-5 h-5 text-blue-100" />
@@ -129,8 +146,6 @@ export default function ContactPage() {
                         </p>
                       </div>
                     </div>
-
-                    {/* Email */}
                     <div className="flex items-start gap-4 group">
                       <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
                         <Mail className="w-5 h-5 text-blue-100" />
@@ -149,8 +164,6 @@ export default function ContactPage() {
                         </p>
                       </div>
                     </div>
-
-                    {/* Website */}
                     <div className="flex items-start gap-4 group">
                       <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
                         <Globe className="w-5 h-5 text-blue-100" />
@@ -180,8 +193,6 @@ export default function ContactPage() {
                 <h3 className="text-2xl font-bold text-[#0F172A] mb-8">
                   Send us a message
                 </h3>
-
-                {/* Tambahkan event handler onSubmit */}
                 <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
@@ -198,7 +209,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-gray-50 focus:bg-white"
-                        placeholder="e.g. John Due"
+                        placeholder="e.g. Ruzia Mulyana"
                       />
                     </div>
                     <div className="space-y-2">
@@ -219,7 +230,6 @@ export default function ContactPage() {
                       />
                     </div>
                   </div>
-
                   <div className="space-y-2">
                     <label
                       htmlFor="subject"
@@ -237,7 +247,6 @@ export default function ContactPage() {
                       placeholder="How can we help you?"
                     />
                   </div>
-
                   <div className="space-y-2">
                     <label
                       htmlFor="message"
@@ -256,15 +265,18 @@ export default function ContactPage() {
                     ></textarea>
                   </div>
 
-                  {/* Submit Button Dinamis */}
+                  {/* Pancing Bot Spam (Honeypot) - Disembunyikan dari User */}
+                  <input
+                    type="checkbox"
+                    name="botcheck"
+                    className="hidden"
+                    style={{ display: "none" }}
+                  />
+
                   <button
                     type="submit"
                     disabled={isSubmitting || isSuccess}
-                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all shadow-lg group ${
-                      isSuccess
-                        ? "bg-green-600 hover:bg-green-700 text-white shadow-green-900/20"
-                        : "bg-[#0F172A] hover:bg-blue-800 text-white shadow-blue-900/20"
-                    } ${isSubmitting ? "opacity-75 cursor-not-allowed" : ""}`}
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all shadow-lg group ${isSuccess ? "bg-green-600 hover:bg-green-700 text-white shadow-green-900/20" : "bg-[#0F172A] hover:bg-blue-800 text-white shadow-blue-900/20"} ${isSubmitting ? "opacity-75 cursor-not-allowed" : ""}`}
                   >
                     {isSubmitting ? (
                       "Sending..."
